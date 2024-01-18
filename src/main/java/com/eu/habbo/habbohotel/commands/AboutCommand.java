@@ -55,22 +55,18 @@ public class AboutCommand extends Command {
         //gameClient.sendResponse(new MessagesForYouComposer(Collections.singletonList(credits)));
 
         THashMap<String, String> dater = new THashMap<>();
-        dater.put("title", "Comet Server HabboZone Edition");
-        dater.put("image", "${image.library.url}/notification/aboutcomet.png");
+        dater.put("title", "About HabboZone Server");
+        dater.put("image", "${image.library.url}/notification/server.png");
         dater.put("message", "<b>Server Status</b>\r" +
                 "- Users online: " + Emulator.getGameEnvironment().getHabboManager().getOnlineCount() + "\r" +
                 "- Active rooms: " + Emulator.getGameEnvironment().getRoomManager().getActiveRooms().size() + "\r" +
-                "- Uptime: " + day + (day > 1 ? " days " : " day ") + hours + (hours > 1 ? " hours " : " hour ") + minute + (minute > 1 ? " minutes " : " minute ") + second + (second > 1 ? " seconds" : " second") + "\r\r" +
-                "\n" +
-                "<b>Server Infos</b>\r" +
-                "- Allocated memory: " + Emulator.getRuntime().maxMemory() / (1024 * 1024) + "MB" + "\r\n" +
-                "- Used memory: " + (Emulator.getRuntime().totalMemory() - Emulator.getRuntime().freeMemory()) / (1024 * 1024) + "/" + (Emulator.getRuntime().freeMemory()) / (1024 * 1024) + "MB\r" +
-                "- CPU cores: " + Emulator.getRuntime().availableProcessors() + "\r\r" +
-                "\n" +
-                "<b>Credits</b>\r" +
-                //"<b>Banner</b>\r" +gameClient.getHabbo().getHabboInfo().getBanner()+
-                "- Comet Developers\r" +
-                "- HabboZone Developers\r");
+                "- Uptime: " + day + (day > 1 ? " days " : " day ") + hours + (hours > 1 ? " hours " : " hour ") + minute + (minute > 1 ? " minutes " : " minute ") + second + (second > 1 ? " seconds" : " second") + "\r\r"
+                //+"\n" +
+                //"<b>Server Infos</b>\r" +
+                //"- Allocated memory: " + Emulator.getRuntime().maxMemory() / (1024 * 1024) + "MB" + "\r\n" +
+                //"- Used memory: " + (Emulator.getRuntime().totalMemory() - Emulator.getRuntime().freeMemory()) / (1024 * 1024) + "/" + (Emulator.getRuntime().freeMemory()) / (1024 * 1024) + "MB\r" +
+                //"- CPU cores: " + Emulator.getRuntime().availableProcessors()
+                 );
         ServerMessage mymessage = new BubbleAlertComposer("about.png", dater).compose();
         gameClient.sendResponse(mymessage);
         //gameClient.getHabbo().getHabboInfo().setBanner(61);

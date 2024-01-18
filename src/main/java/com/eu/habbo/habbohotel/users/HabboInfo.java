@@ -564,19 +564,59 @@ public class HabboInfo implements Runnable {
     public List<MessengerCategory> getMessengerCategories() { return this.messengerCategories; }
 
     public void updateDuckets() {
-        try (Connection connection = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement = connection.prepareStatement("UPDATE users_currency SET users_currency.amount = ? WHERE users_currency.user_id = ? AND users_currency.type = 0")) {
-            statement.setInt(1, this.getPixels());
-            statement.setInt(2, this.id);
-            statement.execute();
+        try (Connection connection = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM users_currency WHERE user_id = ? AND amount = '0' LIMIT 1")) {
+            statement.setInt(1, this.id);
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    try (Connection connection2 = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement2 = connection2.prepareStatement("UPDATE users_currency SET users_currency.amount = ? WHERE users_currency.user_id = ? AND users_currency.type = 0")) {
+                        statement2.setInt(1, this.getPixels());
+                        statement2.setInt(2, this.id);
+                        statement2.execute();
+                    } catch (SQLException e2) {
+                        LOGGER.error("Caught SQL exception", e2);
+                    }
+                    LOGGER.info("Duckets upated on "+this.getUsername()+" account");
+                } else {
+                    try (Connection connection3 = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement3 = connection3.prepareStatement("INSERT INTO users_currency (user_id, type, amount) VALUES (?, ?, ?, NOW(), NOW())")) {
+                        statement3.setInt(1, this.id); //userid
+                        statement3.setInt(2, 0); //type
+                        statement3.setInt(3, 200000); //amount
+                        statement3.execute();
+                    } catch (SQLException e) {
+                        LOGGER.error("Caught SQL exception", e);
+                    }
+                    LOGGER.info("Insert Duckets in users currency for "+this.username+" account");
+                }
+            }
         } catch (SQLException e) {
             LOGGER.error("Caught SQL exception", e);
         }
     }
     public void updateDiamonds() {
-        try (Connection connection = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement = connection.prepareStatement("UPDATE users_currency SET users_currency.amount = ? WHERE users_currency.user_id = ? AND users_currency.type = 5")) {
-            statement.setInt(1, this.getCurrencyAmount(5));
-            statement.setInt(2, this.id);
-            statement.execute();
+        try (Connection connection = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM users_currency WHERE user_id = ? AND type = '5' LIMIT 1")) {
+            statement.setInt(1, this.id);
+            try (ResultSet set = statement.executeQuery()) {
+                if (set.next()) {
+                    try (Connection connection2 = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement2 = connection2.prepareStatement("UPDATE users_currency SET users_currency.amount = ? WHERE users_currency.user_id = ? AND users_currency.type = 5")) {
+                        statement2.setInt(1, this.getCurrencyAmount(5));
+                        statement2.setInt(2, this.id);
+                        statement2.execute();
+                    } catch (SQLException e2) {
+                        LOGGER.error("Caught SQL exception", e2);
+                    }
+                    LOGGER.info("Diamonds upated on "+this.getUsername()+" account");
+                } else {
+                    try (Connection connection3 = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement3 = connection3.prepareStatement("INSERT INTO users_currency (user_id, type, amount) VALUES (?, ?, ?, NOW(), NOW())")) {
+                        statement3.setInt(1, this.id); //userid
+                        statement3.setInt(2, 5); //type
+                        statement3.setInt(3, 0); //amount
+                        statement3.execute();
+                    } catch (SQLException e3) {
+                        LOGGER.error("Caught SQL exception", e3);
+                    }
+                    LOGGER.info("Insert Diamonds in users currency for "+this.username+" account");
+                }
+            }
         } catch (SQLException e) {
             LOGGER.error("Caught SQL exception", e);
         }
