@@ -9,11 +9,17 @@ import com.eu.habbo.plugin.events.users.UserSavedWardrobeEvent;
 public class SaveWardrobeEvent extends MessageHandler {
     @Override
     public void handle() throws Exception {
+
         int slotId = this.packet.readInt();
         String look = this.packet.readString();
         String gender = this.packet.readString();
 
         WardrobeComponent.WardrobeItem wardrobeItem;
+        if(look.isEmpty()) {
+            wardrobeItem = this.client.getHabbo().getInventory().getWardrobeComponent().getLooks().get(slotId);
+            wardrobeItem.setNeedsDelete(true);
+            wardrobeItem.setNeedsUpdate(false);
+        }
         if (this.client.getHabbo().getInventory().getWardrobeComponent().getLooks().containsKey(slotId)) {
             wardrobeItem = this.client.getHabbo().getInventory().getWardrobeComponent().getLooks().get(slotId);
             wardrobeItem.setGender(HabboGender.valueOf(gender));

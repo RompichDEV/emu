@@ -75,7 +75,7 @@ public class WardrobeComponent {
     }
 
     public void dispose() {
-        this.looks.values().stream().filter(item -> item.needsInsert || item.needsUpdate).forEach(item -> {
+        this.looks.values().stream().filter(item -> item.needsInsert || item.needsUpdate || item.needsDelete).forEach(item -> {
             Emulator.getThreading().run(item);
         });
 
@@ -89,6 +89,8 @@ public class WardrobeComponent {
         private String look;
         private boolean needsInsert = false;
         private boolean needsUpdate = false;
+
+        private boolean needsDelete = false;
 
         private WardrobeItem(ResultSet set, Habbo habbo) throws SQLException {
             this.gender = HabboGender.valueOf(set.getString("gender"));
@@ -136,6 +138,7 @@ public class WardrobeComponent {
             this.needsUpdate = needsUpdate;
         }
 
+        public void setNeedsDelete(boolean needsDelete) { this.needsDelete = needsDelete; }
         public int getSlotId() {
             return this.slotId;
         }
@@ -161,6 +164,16 @@ public class WardrobeComponent {
                         statement.setString(1, this.look);
                         statement.setInt(2, this.slotId);
                         statement.setInt(3, this.habbo.getHabboInfo().getId());
+                        statement.execute();
+                    }
+                }
+
+                if (this.needsDelete) {
+                    this.needsInsert = false;
+                    this.needsUpdate = false;
+                    try (PreparedStatement statement = connection.prepareStatement("DELETE FROM users_wardrobe WHERE slot_id = ? AND user_id = ?")) {
+                        statement.setInt(1, this.slotId);
+                        statement.setInt(2, this.habbo.getHabboInfo().getId());
                         statement.execute();
                     }
                 }
