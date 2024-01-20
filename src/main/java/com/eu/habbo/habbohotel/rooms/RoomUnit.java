@@ -218,9 +218,8 @@ public class RoomUnit {
 
             if (habbo != null) {
                 if(room.tileWalkable(next, habbo)) {
-                    habbo.getClient().getHabbo().whisper("Can move !");
-                } else {
-                    habbo.getClient().getHabbo().whisper("Can't move !");
+                    //User can move !
+                    //habbo.getClient().getHabbo().whisper("Can move !");
                 }
                 if (this.isIdle()) {
                     UserIdleEvent event = new UserIdleEvent(habbo, UserIdleEvent.IdleReason.WALKED, false);
