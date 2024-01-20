@@ -5,6 +5,7 @@ import com.eu.habbo.habbohotel.achievements.AchievementManager;
 import com.eu.habbo.habbohotel.bots.Bot;
 import com.eu.habbo.habbohotel.bots.VisitorBot;
 import com.eu.habbo.habbohotel.commands.CommandHandler;
+import com.eu.habbo.habbohotel.gameclients.GameClient;
 import com.eu.habbo.habbohotel.games.Game;
 import com.eu.habbo.habbohotel.guilds.Guild;
 import com.eu.habbo.habbohotel.guilds.GuildMember;
@@ -622,12 +623,13 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
     private RoomTileState checkStateForItem(HabboItem item, RoomTile tile) {
         RoomTileState result = RoomTileState.BLOCKED;
 
+
         if (item.isWalkable()) {
             result = RoomTileState.OPEN;
         }
 
         if (item.getBaseItem().allowSit()) {
-            result = RoomTileState.SIT;
+            result = RoomTileState.SIT; //ICI
         }
 
         if (item.getBaseItem().allowLay()) {
@@ -646,6 +648,11 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
         return this.tileWalkable(t.x, t.y);
     }
 
+    public boolean tileWalkable(RoomTile t, Habbo user) {
+        boolean hasHabbo = true;
+
+        return hasHabbo;
+    }
     public boolean tileWalkable(short x, short y) {
         boolean walkable = this.layout.tileWalkable(x, y);
         RoomTile tile = this.getLayout().getTile(x, y);

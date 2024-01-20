@@ -32,7 +32,7 @@ public class WiredTriggerHabboSaysKeyword extends InteractionWiredTrigger {
     public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         if (this.key.length() > 0) {
             if (stuff[0] instanceof String) {
-                if (((String) stuff[0]).toLowerCase().contains(this.key.toLowerCase())) {
+                if(((String) stuff[0]).toLowerCase().equals(this.key.toLowerCase())) {
                     Habbo habbo = room.getHabbo(roomUnit);
                     return !this.ownerOnly || (habbo != null && room.getOwnerId() == habbo.getHabboInfo().getId());
                 }

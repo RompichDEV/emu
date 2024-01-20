@@ -217,6 +217,11 @@ public class RoomUnit {
             this.status.remove(RoomUnitStatus.DEAD);
 
             if (habbo != null) {
+                if(room.tileWalkable(next, habbo)) {
+                    habbo.getClient().getHabbo().whisper("Can move !");
+                } else {
+                    habbo.getClient().getHabbo().whisper("Can't move !");
+                }
                 if (this.isIdle()) {
                     UserIdleEvent event = new UserIdleEvent(habbo, UserIdleEvent.IdleReason.WALKED, false);
                     Emulator.getPluginManager().fireEvent(event);

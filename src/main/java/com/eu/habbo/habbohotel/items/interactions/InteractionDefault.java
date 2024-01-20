@@ -41,6 +41,7 @@ public class InteractionDefault extends HabboItem {
 
     @Override
     public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
+        LOGGER.info("kkkkkkkkkkkkkkkkkkkkkkdddddddddddd");
         return true;
     }
 

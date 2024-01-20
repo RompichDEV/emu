@@ -310,7 +310,7 @@ public class RoomLayout {
                     continue;
                 }
 
-                if (currentAdj.hasUnits() && doorTile.distance(currentAdj) > 2 && (!isWalktroughRetry || !this.room.isAllowWalkthrough() || currentAdj.equals(goalLocation))) {
+                if (currentAdj.hasUnits() && doorTile.distance(currentAdj) > 2 && (!this.room.isAllowWalkthrough() || currentAdj.equals(goalLocation))) {
                     closedList.add(currentAdj);
                     openList.remove(currentAdj);
                     continue;
@@ -328,6 +328,7 @@ public class RoomLayout {
             }
         }
 
+        //If user can't move
         if (this.room.isAllowWalkthrough() && !isWalktroughRetry) {
             return this.findPath(oldTile, newTile, goalLocation, roomUnit, true);
         }
@@ -388,8 +389,9 @@ public class RoomLayout {
             if (this.canWalkOn(temp, unit)) {
                 if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
                     temp.isDiagonally(false);
-                    if (!adj.contains(temp))
+                    if (!adj.contains(temp)) {
                         adj.add(temp);
+                    }
                 }
             }
         }
@@ -410,6 +412,7 @@ public class RoomLayout {
                     temp.isDiagonally(false);
                     if (!adj.contains(temp))
                         adj.add(temp);
+
                 }
             }
         }
@@ -432,8 +435,9 @@ public class RoomLayout {
                     if (this.canWalkOn(temp, unit)) {
                         if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
                             temp.isDiagonally(true);
-                            if (!adj.contains(temp))
+                            if (!adj.contains(temp)) {
                                 adj.add(temp);
+                            }
                         }
                     }
                 }
@@ -443,6 +447,7 @@ public class RoomLayout {
                 RoomTile offY = this.findTile(openList, x, (short) (y - 1));
                 if (offX != null && offY != null && (offX.isWalkable() || offY.isWalkable())) {
                     RoomTile temp = this.findTile(openList, (short) (x - 1), (short) (y - 1));
+                    //KKKKKKKKKKKKKSSSS
                     if (this.canWalkOn(temp, unit)) {
                         if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
                             temp.isDiagonally(true);
@@ -485,7 +490,12 @@ public class RoomLayout {
     }
 
     private boolean canWalkOn(RoomTile tile, RoomUnit unit) {
-        return tile != null && (unit.canOverrideTile(tile) || (tile.state != RoomTileState.BLOCKED && tile.state != RoomTileState.INVALID));
+        if (tile != null)
+            if (unit.canOverrideTile(tile) || (tile.state != RoomTileState.BLOCKED && tile.state != RoomTileState.INVALID)) {
+                return true;
+            }
+        return false;
+
     }
 
     public void moveDiagonally(boolean value) {
