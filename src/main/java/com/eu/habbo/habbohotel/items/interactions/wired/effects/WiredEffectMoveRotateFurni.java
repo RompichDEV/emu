@@ -57,6 +57,7 @@ public class WiredEffectMoveRotateFurni extends InteractionWiredEffect implement
             RoomTile newLocation = room.getLayout().getTile(item.getX(), item.getY());
             RoomTile oldLocation = room.getLayout().getTile(item.getX(), item.getY());
             double oldZ = item.getZ();
+            double newZ = item.getZ();
 
             if(this.direction > 0) {
                 RoomUserRotation moveDirection = this.getMovementDirection();

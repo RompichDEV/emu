@@ -309,7 +309,7 @@ public class RoomLayout {
                     openList.remove(currentAdj);
                     continue;
                 }
-
+                //walkThrough fix by Jon
                 if (currentAdj.hasUnits() && doorTile.distance(currentAdj) > 2 && (!this.room.isAllowWalkthrough() || currentAdj.equals(goalLocation))) {
                     closedList.add(currentAdj);
                     openList.remove(currentAdj);
@@ -389,9 +389,8 @@ public class RoomLayout {
             if (this.canWalkOn(temp, unit)) {
                 if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
                     temp.isDiagonally(false);
-                    if (!adj.contains(temp)) {
+                    if (!adj.contains(temp))
                         adj.add(temp);
-                    }
                 }
             }
         }
@@ -412,7 +411,6 @@ public class RoomLayout {
                     temp.isDiagonally(false);
                     if (!adj.contains(temp))
                         adj.add(temp);
-
                 }
             }
         }
@@ -428,62 +426,60 @@ public class RoomLayout {
         }
         if (this.CANMOVEDIAGONALY) {
             if ((x < this.mapSizeX) && (y < this.mapSizeY)) {
-                RoomTile offX = this.findTile(openList, (short) (x + 1), y);
-                RoomTile offY = this.findTile(openList, x, (short) (y + 1));
-                if (offX != null && offY != null && (offX.isWalkable() || offY.isWalkable())) {
-                    RoomTile temp = this.findTile(openList, (short) (x + 1), (short) (y + 1));
-                    if (this.canWalkOn(temp, unit)) {
-                        if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
-                            temp.isDiagonally(true);
-                            if (!adj.contains(temp)) {
-                                adj.add(temp);
-                            }
-                        }
+                //RoomTile offX = this.findTile(openList, (short) (x + 1), y);
+                //RoomTile offY = this.findTile(openList, x, (short) (y + 1));
+                //if (offX != null && offY != null && (offX.isWalkable() || offY.isWalkable())) {
+                RoomTile temp = this.findTile(openList, (short) (x + 1), (short) (y + 1));
+                if (this.canWalkOn(temp, unit)) {
+                    if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
+                        temp.isDiagonally(true);
+                        if (!adj.contains(temp))
+                            adj.add(temp);
                     }
                 }
+                //}
             }
             if ((x > 0) && (y > 0)) {
-                RoomTile offX = this.findTile(openList, (short) (x - 1), y);
-                RoomTile offY = this.findTile(openList, x, (short) (y - 1));
-                if (offX != null && offY != null && (offX.isWalkable() || offY.isWalkable())) {
-                    RoomTile temp = this.findTile(openList, (short) (x - 1), (short) (y - 1));
-                    //KKKKKKKKKKKKKSSSS
-                    if (this.canWalkOn(temp, unit)) {
-                        if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
-                            temp.isDiagonally(true);
-                            if (!adj.contains(temp))
-                                adj.add(temp);
-                        }
+                //RoomTile offX = this.findTile(openList, (short) (x - 1), y);
+                //RoomTile offY = this.findTile(openList, x, (short) (y - 1));
+                //if (offX != null && offY != null && (offX.isWalkable() || offY.isWalkable())) {
+                RoomTile temp = this.findTile(openList, (short) (x - 1), (short) (y - 1));
+                if (this.canWalkOn(temp, unit)) {
+                    if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
+                        temp.isDiagonally(true);
+                        if (!adj.contains(temp))
+                            adj.add(temp);
                     }
                 }
+                //}
             }
             if ((x > 0) && (y < this.mapSizeY)) {
-                RoomTile offX = this.findTile(openList, (short) (x - 1), y);
-                RoomTile offY = this.findTile(openList, x, (short) (y + 1));
-                if (offX != null && offY != null && (offX.isWalkable() || offY.isWalkable())) {
-                    RoomTile temp = this.findTile(openList, (short) (x - 1), (short) (y + 1));
-                    if (this.canWalkOn(temp, unit)) {
-                        if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
-                            temp.isDiagonally(true);
-                            if (!adj.contains(temp))
-                                adj.add(temp);
-                        }
+                //RoomTile offX = this.findTile(openList, (short) (x - 1), y);
+                //RoomTile offY = this.findTile(openList, x, (short) (y + 1));
+                //if (offX != null && offY != null && (offX.isWalkable() || offY.isWalkable())) {
+                RoomTile temp = this.findTile(openList, (short) (x - 1), (short) (y + 1));
+                if (this.canWalkOn(temp, unit)) {
+                    if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
+                        temp.isDiagonally(true);
+                        if (!adj.contains(temp))
+                            adj.add(temp);
                     }
                 }
+                //}
             }
             if ((x < this.mapSizeX) && (y > 0)) {
-                RoomTile offX = this.findTile(openList, (short) (x + 1), y);
-                RoomTile offY = this.findTile(openList, x, (short) (y - 1));
-                if (offX != null && offY != null && (offX.isWalkable() || offY.isWalkable())) {
-                    RoomTile temp = this.findTile(openList, (short) (x + 1), (short) (y - 1));
-                    if (this.canWalkOn(temp, unit)) {
-                        if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
-                            temp.isDiagonally(true);
-                            if (!adj.contains(temp))
-                                adj.add(temp);
-                        }
+                //RoomTile offX = this.findTile(openList, (short) (x + 1), y);
+                //RoomTile offY = this.findTile(openList, x, (short) (y - 1));
+                //if (offX != null && offY != null && (offX.isWalkable() || offY.isWalkable())) {
+                RoomTile temp = this.findTile(openList, (short) (x + 1), (short) (y - 1));
+                if (this.canWalkOn(temp, unit)) {
+                    if (temp.state != RoomTileState.SIT || nextTile.getStackHeight() - node.getStackHeight() <= 2.0) {
+                        temp.isDiagonally(true);
+                        if (!adj.contains(temp))
+                            adj.add(temp);
                     }
                 }
+                //}
             }
         }
         return adj;

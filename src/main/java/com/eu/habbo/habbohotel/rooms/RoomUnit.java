@@ -257,7 +257,6 @@ public class RoomUnit {
                         return false;
                     }
                     next = (RoomTile)this.path.pop();
-
                 }
             }
 
@@ -276,6 +275,7 @@ public class RoomUnit {
                     return false;
                 }
             }
+
 
             double zHeight = 0.0D;
 
