@@ -216,6 +216,7 @@ public class ItemManager {
         this.interactionsList.add(new ItemInteraction("wf_act_move_rotate", WiredEffectMoveRotateFurni.class));
         this.interactionsList.add(new ItemInteraction("wf_act_give_score", WiredEffectGiveScore.class));
         this.interactionsList.add(new ItemInteraction("wf_act_show_message", WiredEffectWhisper.class));
+        this.interactionsList.add(new ItemInteraction("wf_act_show_message_room", WiredEffectWhisperRoom.class));
         this.interactionsList.add(new ItemInteraction("wf_act_teleport_to", WiredEffectTeleport.class));
         this.interactionsList.add(new ItemInteraction("wf_act_join_team", WiredEffectJoinTeam.class));
         this.interactionsList.add(new ItemInteraction("wf_act_leave_team", WiredEffectLeaveTeam.class));
