@@ -52,7 +52,6 @@ public enum RoomChatMessageBubbles {
     UNKNOWN_48(48, "", true, false),
     UNKNOWN_49(49, "", true, false),
     UNKNOWN_50(50, "", true, false),
-    UNKNOWN_50(50, "", true, false),
     UNKNOWN_51(51, "", true, false),
     UNKNOWN_52(52, "", true, false),
     UNKNOWN_53(53, "", true, false),

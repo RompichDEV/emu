@@ -8,33 +8,30 @@ import com.eu.habbo.habbohotel.items.interactions.InteractionWiredTrigger;
 import com.eu.habbo.habbohotel.items.interactions.wired.WiredSettings;
 import com.eu.habbo.habbohotel.permissions.Permission;
 import com.eu.habbo.habbohotel.rooms.Room;
-import com.eu.habbo.habbohotel.rooms.RoomChatMessage;
 import com.eu.habbo.habbohotel.rooms.RoomChatMessageBubbles;
 import com.eu.habbo.habbohotel.rooms.RoomUnit;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.habbohotel.wired.WiredEffectType;
 import com.eu.habbo.habbohotel.wired.WiredHandler;
-import com.eu.habbo.messages.ClientMessage;
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.incoming.wired.WiredSaveException;
-import com.eu.habbo.messages.outgoing.MessageComposer;
-import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 import gnu.trove.procedure.TObjectProcedure;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WiredEffectWhisperRoom extends InteractionWiredEffect {
-  public static final WiredEffectType type = WiredEffectType.SHOW_MESSAGE;
-
+public class WiredEffectFreezeUnfreezeUserEffect extends InteractionWiredEffect {
+  public static final WiredEffectType type = WiredEffectType.RESET_TIMERS;
+  
   protected String message = "";
-
-  public WiredEffectWhisperRoom(ResultSet set, Item baseItem) throws SQLException {
+  
+  public WiredEffectFreezeUnfreezeUserEffect(ResultSet set, Item baseItem) throws SQLException {
     super(set, baseItem);
   }
-
-  public WiredEffectWhisperRoom(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
+  
+  public WiredEffectFreezeUnfreezeUserEffect(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
     super(id, userId, item, extradata, limitedStack, limitedSells);
   }
 
@@ -60,10 +57,10 @@ public class WiredEffectWhisperRoom extends InteractionWiredEffect {
           });
       message.appendInt(invalidTriggers.size());
       for (Integer i : invalidTriggers)
-        message.appendInt(i);
+        message.appendInt(i); 
     } else {
       message.appendInt(0);
-    }
+    } 
   }
 
   @Override
@@ -84,27 +81,26 @@ public class WiredEffectWhisperRoom extends InteractionWiredEffect {
     this.setDelay(delay);
     return true;
   }
-
+  
   public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
-    if (this.message.length() > 0 &&
-      roomUnit != null) {
-      String msg = "";
-      for (Habbo habbo : room.getHabbos()) {
-        if (habbo != null) {
-          msg = this.message.replace("%user%", habbo.getHabboInfo().getUsername()).replace("%online_count%", Emulator.getGameEnvironment().getHabboManager().getOnlineCount() + "").replace("%room_count%", Emulator.getGameEnvironment().getRoomManager().getActiveRooms().size() + "");
-          habbo.getClient().sendResponse((MessageComposer)new RoomUserWhisperComposer(new RoomChatMessage(msg, habbo, habbo, RoomChatMessageBubbles.WIRED)));
-          if (habbo.getRoomUnit().isIdle())
-            habbo.getRoomUnit().getRoom().unIdle(habbo);
-        }
-      }
-    }
+    if (roomUnit != null) {
+      Habbo habbo = room.getHabbo(roomUnit);
+      if (habbo != null)
+        if (habbo.getRoomUnit().canWalk() == true) {
+          habbo.getRoomUnit().setCanWalk(false);
+          habbo.whisper(Emulator.getTexts().getValue("wired.effect.userfreeze.frozen"), RoomChatMessageBubbles.ALERT);
+        } else {
+          habbo.getRoomUnit().setCanWalk(true);
+          habbo.whisper(Emulator.getTexts().getValue("wired.effect.userfreeze.unfrozen"), RoomChatMessageBubbles.ALERT);
+        }  
+    } 
     return false;
   }
-
+  
   public String getWiredData() {
     return WiredHandler.getGsonBuilder().create().toJson(new JsonData(this.message, getDelay()));
   }
-
+  
   public void loadWiredData(ResultSet set, Room room) throws SQLException {
     String wiredData = set.getString("wired_data");
     if (wiredData.startsWith("{")) {
@@ -116,29 +112,29 @@ public class WiredEffectWhisperRoom extends InteractionWiredEffect {
       if ((wiredData.split("\t")).length >= 2) {
         setDelay(Integer.valueOf(wiredData.split("\t")[0]));
         this.message = wiredData.split("\t")[1];
-      }
+      } 
       needsUpdate(true);
-    }
+    } 
   }
-
+  
   public void onPickUp() {
     this.message = "";
     setDelay(0);
   }
-
+  
   public WiredEffectType getType() {
     return type;
   }
-
+  
   public boolean requiresTriggeringUser() {
     return true;
   }
-
+  
   static class JsonData {
     String message;
-
+    
     int delay;
-
+    
     public JsonData(String message, int delay) {
       this.message = message;
       this.delay = delay;

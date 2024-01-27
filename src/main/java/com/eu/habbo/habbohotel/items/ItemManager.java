@@ -209,7 +209,8 @@ public class ItemManager {
         this.interactionsList.add(new ItemInteraction("wf_trg_game_team_win", WiredTriggerTeamWins.class));
         this.interactionsList.add(new ItemInteraction("wf_trg_game_team_lose", WiredTriggerTeamLoses.class));
 
-
+        this.interactionsList.add(new ItemInteraction("wf_act_close_dice", WiredEffectCloseDices.class));
+        this.interactionsList.add(new ItemInteraction("wf_act_freeze_unfreeze", WiredEffectFreezeUnfreezeUserEffect.class));
         this.interactionsList.add(new ItemInteraction("wf_act_toggle_state", WiredEffectToggleFurni.class));
         this.interactionsList.add(new ItemInteraction("wf_act_reset_timers", WiredEffectResetTimers.class));
         this.interactionsList.add(new ItemInteraction("wf_act_match_to_sshot", WiredEffectMatchFurni.class));
