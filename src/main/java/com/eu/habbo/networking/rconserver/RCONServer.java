@@ -40,6 +40,7 @@ public class RCONServer extends Server {
         this.addRCONMessage("givepixels", GivePixels.class);
         this.addRCONMessage("givepoints", GivePoints.class);
         this.addRCONMessage("hotelalert", HotelAlert.class);
+        this.addRCONMessage("enableuser", EnableUser.class);
         this.addRCONMessage("sendgift", SendGift.class);
         this.addRCONMessage("sendroombundle", SendRoomBundle.class);
         this.addRCONMessage("setrank", SetRank.class);

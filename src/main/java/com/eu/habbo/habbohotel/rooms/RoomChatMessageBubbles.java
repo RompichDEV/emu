@@ -52,7 +52,6 @@ public enum RoomChatMessageBubbles {
     UNKNOWN_48(48, "", true, false),
     UNKNOWN_49(49, "", true, false),
     UNKNOWN_50(50, "", true, false),
-    UNKNOWN_50(50, "", true, false),
     UNKNOWN_51(51, "", true, false),
     UNKNOWN_52(52, "", true, false),
     UNKNOWN_53(53, "", true, false),
@@ -64,7 +63,8 @@ public enum RoomChatMessageBubbles {
     UNKNOWN_59(59, "", true, false),
     UNKNOWN_60(60, "", true, false),
     UNKNOWN_61(61, "", true, false),
-    UNKNOWN_62(63, "", true, false),
+    UNKNOWN_62(62, "", true, false),
+    UNKNOWN_63(63, "", true, false),
     UNKNOWN_64(64, "", true, false),
     UNKNOWN_65(65, "", true, false),
     UNKNOWN_66(66, "", true, false),
@@ -96,11 +96,7 @@ public enum RoomChatMessageBubbles {
     UNKNOWN_92(92, "", true, false),
     UNKNOWN_93(93, "", true, false),
     UNKNOWN_94(94, "", true, false),
-    UNKNOWN_95(95, "", true, false),
-    UNKNOWN_96(96, "", true, false),
-    UNKNOWN_97(97, "", true, false),
-    UNKNOWN_98(98, "", true, false),
-    UNKNOWN_99(99, "", true, false);
+    UNKNOWN_95(95, "", true, false);
 
     private final int type;
     private final String permission;
