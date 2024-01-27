@@ -209,13 +209,15 @@ public class ItemManager {
         this.interactionsList.add(new ItemInteraction("wf_trg_game_team_win", WiredTriggerTeamWins.class));
         this.interactionsList.add(new ItemInteraction("wf_trg_game_team_lose", WiredTriggerTeamLoses.class));
 
-
+        this.interactionsList.add(new ItemInteraction("wf_act_close_dice", WiredEffectCloseDices.class));
+        this.interactionsList.add(new ItemInteraction("wf_act_freeze_unfreeze", WiredEffectFreezeUnfreezeUserEffect.class));
         this.interactionsList.add(new ItemInteraction("wf_act_toggle_state", WiredEffectToggleFurni.class));
         this.interactionsList.add(new ItemInteraction("wf_act_reset_timers", WiredEffectResetTimers.class));
         this.interactionsList.add(new ItemInteraction("wf_act_match_to_sshot", WiredEffectMatchFurni.class));
         this.interactionsList.add(new ItemInteraction("wf_act_move_rotate", WiredEffectMoveRotateFurni.class));
         this.interactionsList.add(new ItemInteraction("wf_act_give_score", WiredEffectGiveScore.class));
         this.interactionsList.add(new ItemInteraction("wf_act_show_message", WiredEffectWhisper.class));
+        this.interactionsList.add(new ItemInteraction("wf_act_show_message_room", WiredEffectWhisperRoom.class));
         this.interactionsList.add(new ItemInteraction("wf_act_teleport_to", WiredEffectTeleport.class));
         this.interactionsList.add(new ItemInteraction("wf_act_join_team", WiredEffectJoinTeam.class));
         this.interactionsList.add(new ItemInteraction("wf_act_leave_team", WiredEffectLeaveTeam.class));
