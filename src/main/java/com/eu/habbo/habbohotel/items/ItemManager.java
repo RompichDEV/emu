@@ -242,6 +242,10 @@ public class ItemManager {
         this.interactionsList.add(new ItemInteraction("wf_act_alert", WiredEffectAlert.class));
         this.interactionsList.add(new ItemInteraction("wf_act_give_handitem", WiredEffectGiveHandItem.class));
         this.interactionsList.add(new ItemInteraction("wf_act_give_effect", WiredEffectGiveEffect.class));
+        this.interactionsList.add(new ItemInteraction("wf_act_walktofurni_effect", WiredEffectUserWalkToFurni.class));
+        this.interactionsList.add(new ItemInteraction("wf_act_lay_effect", WiredEffectUserLay.class));
+        this.interactionsList.add(new ItemInteraction("wf_act_sit_effect", WiredEffectUserSit.class));
+
 
         this.interactionsList.add(new ItemInteraction("wf_cnd_has_furni_on", WiredConditionFurniHaveFurni.class));
         this.interactionsList.add(new ItemInteraction("wf_cnd_furnis_hv_avtrs", WiredConditionFurniHaveHabbo.class));
