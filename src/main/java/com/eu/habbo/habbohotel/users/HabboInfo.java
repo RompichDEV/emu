@@ -563,6 +563,9 @@ public class HabboInfo implements Runnable {
 
     public List<MessengerCategory> getMessengerCategories() { return this.messengerCategories; }
 
+    public void updateBadges() {
+
+    }
     public void updateDuckets() {
         try (Connection connection = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM users_currency WHERE user_id = ? AND amount = '0' LIMIT 1")) {
             statement.setInt(1, this.id);
@@ -575,7 +578,7 @@ public class HabboInfo implements Runnable {
                     } catch (SQLException e2) {
                         LOGGER.error("Caught SQL exception", e2);
                     }
-                    LOGGER.info("Duckets upated on "+this.getUsername()+" account");
+                    LOGGER.info("Duckets updated on "+this.getUsername()+" account");
                 } else {
                     try (Connection connection3 = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement3 = connection3.prepareStatement("INSERT INTO users_currency (user_id, type, amount) VALUES (?, ?, ?, NOW(), NOW())")) {
                         statement3.setInt(1, this.id); //userid
@@ -604,7 +607,7 @@ public class HabboInfo implements Runnable {
                     } catch (SQLException e2) {
                         LOGGER.error("Caught SQL exception", e2);
                     }
-                    LOGGER.info("Diamonds upated on "+this.getUsername()+" account");
+                    LOGGER.info("Diamonds updated on "+this.getUsername()+" account");
                 } else {
                     try (Connection connection3 = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement3 = connection3.prepareStatement("INSERT INTO users_currency (user_id, type, amount) VALUES (?, ?, ?, NOW(), NOW())")) {
                         statement3.setInt(1, this.id); //userid
