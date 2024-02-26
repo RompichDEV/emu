@@ -68,7 +68,7 @@ public class WiredConditionHabboHasEffect extends InteractionWiredCondition {
         message.appendInt(0);
         message.appendInt(this.getBaseItem().getSpriteId());
         message.appendInt(this.getId());
-        message.appendString(this.effectId + "");
+        message.appendString(String.valueOf(this.effectId));
         message.appendInt(0);
         message.appendInt(0);
         message.appendInt(this.getType().code);
@@ -78,7 +78,7 @@ public class WiredConditionHabboHasEffect extends InteractionWiredCondition {
 
     @Override
     public boolean saveData(WiredSettings settings) {
-        if(settings.getIntParams().length < 1) return false;
+        if(settings.getIntParams().length < 1) {return false;}
         this.effectId = settings.getIntParams()[0];
 
         return true;
