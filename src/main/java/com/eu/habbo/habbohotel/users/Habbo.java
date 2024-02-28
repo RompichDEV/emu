@@ -185,6 +185,7 @@ public class Habbo implements Runnable {
             this.needsUpdate(true);
             this.run();
             this.getInventory().dispose();
+            this.getHabboInfo().updateCredits();
             this.getHabboInfo().updateDuckets();
             this.getHabboInfo().updateDiamonds();
             this.messenger.connectionChanged(this, false, false);

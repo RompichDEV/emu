@@ -566,9 +566,21 @@ public class HabboInfo implements Runnable {
     public void updateBadges() {
 
     }
+
+    public void updateCredits() {
+        try (Connection connection2 = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement2 = connection2.prepareStatement("UPDATE users SET credits = ? WHERE id = ?")) {
+            statement2.setInt(1, this.getCredits());
+            statement2.setInt(2, this.id);
+            statement2.execute();
+        } catch (SQLException e2) {
+            LOGGER.error("Caught SQL exception", e2);
+        }
+        LOGGER.info("Credits updated on "+this.getUsername()+" account");
+    }
     public void updateDuckets() {
-        try (Connection connection = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM users_currency WHERE user_id = ? AND amount = '0' LIMIT 1")) {
+        try (Connection connection = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement = connection.prepareStatement("SELECT * FROM users_currency WHERE user_id = ? AND type = ? LIMIT 1")) {
             statement.setInt(1, this.id);
+            statement.setInt(2, 0);
             try (ResultSet set = statement.executeQuery()) {
                 if (set.next()) {
                     try (Connection connection2 = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement2 = connection2.prepareStatement("UPDATE users_currency SET users_currency.amount = ? WHERE users_currency.user_id = ? AND users_currency.type = 0")) {
