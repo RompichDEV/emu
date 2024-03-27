@@ -654,16 +654,15 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
         return hasHabbo;
     }
     public boolean tileWalkable(short x, short y) {
-        boolean walkable = this.layout.tileWalkable(x, y);
-        RoomTile tile = this.getLayout().getTile(x, y);
+        RoomTile tile = this.layout.getTile(x, y);
 
-        if (walkable && tile != null) {
-            if (tile.hasUnits() && !this.allowWalkthrough) {
-                walkable = false;
-            }
-        }
+        if (tile == null)
+            return false;
 
-        return walkable;
+        if (tile.state == RoomTileState.SIT || tile.state == RoomTileState.LAY)
+            return (!tile.hasUnits() || this.allowWalkthrough);
+
+        return !tile.hasUnits();
     }
 
     public void pickUpItem(HabboItem item, Habbo picker) {

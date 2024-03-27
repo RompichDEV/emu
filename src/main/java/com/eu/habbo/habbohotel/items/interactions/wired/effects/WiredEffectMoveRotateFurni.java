@@ -14,6 +14,7 @@ import com.eu.habbo.messages.ClientMessage;
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.incoming.wired.WiredSaveException;
 import com.eu.habbo.messages.outgoing.rooms.items.FloorItemOnRollerComposer;
+import gnu.trove.impl.sync.TSynchronizedShortObjectMap;
 import gnu.trove.set.hash.THashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +69,10 @@ public class WiredEffectMoveRotateFurni extends InteractionWiredEffect implement
             }
 
             boolean slideAnimation = item.getRotation() == newRotation;
-
+            System.out.println(room);
+            System.out.println(item);
+            System.out.println(oldLocation);
+            System.out.println(newLocation);
             FurnitureMovementError furniMoveTest = room.furnitureFitsAt(newLocation, item, newRotation, true);
             if(newLocation != null && newLocation.state != RoomTileState.INVALID && (newLocation != oldLocation || newRotation != item.getRotation()) && (furniMoveTest == FurnitureMovementError.NONE || ((furniMoveTest == FurnitureMovementError.TILE_HAS_BOTS || furniMoveTest == FurnitureMovementError.TILE_HAS_HABBOS || furniMoveTest == FurnitureMovementError.TILE_HAS_PETS) && newLocation == oldLocation))) {
                 if(room.furnitureFitsAt(newLocation, item, newRotation, false) == FurnitureMovementError.NONE && room.moveFurniTo(item, newLocation, newRotation, null, !slideAnimation) == FurnitureMovementError.NONE) {

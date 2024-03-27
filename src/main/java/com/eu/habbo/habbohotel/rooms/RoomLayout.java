@@ -260,12 +260,12 @@ public class RoomLayout {
         return this.heightmap.replace("\r\n", "\r");
     }//re
 
-    public final Deque<RoomTile> findPath(RoomTile oldTile, RoomTile newTile, RoomTile goalLocation, RoomUnit roomUnit) {
-        return this.findPath(oldTile, newTile, goalLocation, roomUnit, false);
-    }
+//    public final Deque<RoomTile> findPath(RoomTile oldTile, RoomTile newTile, RoomTile goalLocation, RoomUnit roomUnit) {
+//        return this.findPath(oldTile, newTile, goalLocation, roomUnit);
+//    }
 
-    /// Pathfinder Reworked By Quadral, thanks buddy!! You Saved Morningstar <3
-    public final Deque<RoomTile> findPath(RoomTile oldTile, RoomTile newTile, RoomTile goalLocation, RoomUnit roomUnit, boolean isWalktroughRetry) {
+    /// Pathfinder Reworked By fdp, thanks buddy!! You Saved Morningstar <3
+    public final Deque<RoomTile> findPath(RoomTile oldTile, RoomTile newTile, RoomTile goalLocation, RoomUnit roomUnit) {
         if (this.room == null || !this.room.isLoaded() || oldTile == null || newTile == null || oldTile.equals(newTile) || newTile.state == RoomTileState.INVALID)
             return new LinkedList<>();
 
@@ -273,11 +273,10 @@ public class RoomLayout {
         List<RoomTile> closedList = new LinkedList<>();
         openList.add(oldTile.copy());
 
-        RoomTile doorTile = this.room.getLayout().getDoorTile();
-
         while (!openList.isEmpty()) {
             RoomTile current = this.lowestFInOpen(openList);
             if (current.x == newTile.x && current.y == newTile.y) {
+
                 return this.calcPath(this.findTile(openList, oldTile.x, oldTile.y), current);
             }
 
@@ -286,7 +285,9 @@ public class RoomLayout {
 
             List<RoomTile> adjacentNodes = this.getAdjacent(openList, current, newTile, roomUnit);
             for (RoomTile currentAdj : adjacentNodes) {
-                if (closedList.contains(currentAdj)) continue;
+
+                if (closedList.contains(currentAdj))
+                    continue;
 
                 if (roomUnit.canOverrideTile(currentAdj)) {
                     currentAdj.setPrevious(current);
@@ -296,24 +297,35 @@ public class RoomLayout {
                     continue;
                 }
 
-                if (currentAdj.state == RoomTileState.BLOCKED || ((currentAdj.state == RoomTileState.SIT || currentAdj.state == RoomTileState.LAY) && !currentAdj.equals(goalLocation))) {
+                if (currentAdj.state == RoomTileState.BLOCKED || currentAdj.state == RoomTileState.INVALID) {
                     closedList.add(currentAdj);
                     openList.remove(currentAdj);
                     continue;
-                }
+                } else if (currentAdj.state == RoomTileState.SIT || currentAdj.state == RoomTileState.LAY) {
+                    if (!currentAdj.equals(goalLocation)) {
+                        closedList.add(currentAdj);
+                        openList.remove(currentAdj);
+                        continue;
+                    }
 
-                double height = currentAdj.getStackHeight() - current.getStackHeight();
+                    if (currentAdj.hasUnits() && !this.room.isAllowWalkthrough()) {
+                        closedList.add(currentAdj);
+                        openList.remove(currentAdj);
+                        continue;
+                    }
+                } else {
+                    double dz = currentAdj.getStackHeight() - current.getStackHeight();
+                    if (dz > MAXIMUM_STEP_HEIGHT) {
+                        closedList.add(currentAdj);
+                        openList.remove(currentAdj);
+                        continue;
+                    }
 
-                if ((!ALLOW_FALLING && height < -MAXIMUM_STEP_HEIGHT) || (currentAdj.state == RoomTileState.OPEN && height > MAXIMUM_STEP_HEIGHT)) {
-                    closedList.add(currentAdj);
-                    openList.remove(currentAdj);
-                    continue;
-                }
-                //walkThrough fix by Jon
-                if (currentAdj.hasUnits() && doorTile.distance(currentAdj) > 2 && (!this.room.isAllowWalkthrough() || currentAdj.equals(goalLocation))) {
-                    closedList.add(currentAdj);
-                    openList.remove(currentAdj);
-                    continue;
+                    if (!this.room.isAllowWalkthrough() && currentAdj.hasUnits()) {
+                        closedList.add(currentAdj);
+                        openList.remove(currentAdj);
+                        continue;
+                    }
                 }
 
                 if (!openList.contains(currentAdj)) {
@@ -326,11 +338,6 @@ public class RoomLayout {
                     currentAdj.setgCosts(current);
                 }
             }
-        }
-
-        //If user can't move
-        if (this.room.isAllowWalkthrough() && !isWalktroughRetry) {
-            return this.findPath(oldTile, newTile, goalLocation, roomUnit, true);
         }
 
         return null;

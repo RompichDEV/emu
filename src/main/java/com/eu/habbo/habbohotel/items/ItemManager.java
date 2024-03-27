@@ -208,6 +208,8 @@ public class ItemManager {
         this.interactionsList.add(new ItemInteraction("wf_trg_score_achieved", WiredTriggerScoreAchieved.class));
         this.interactionsList.add(new ItemInteraction("wf_trg_game_team_win", WiredTriggerTeamWins.class));
         this.interactionsList.add(new ItemInteraction("wf_trg_game_team_lose", WiredTriggerTeamLoses.class));
+        this.interactionsList.add(new ItemInteraction("wf_trg_HabboIsAfk", WiredConditionHabboIsAFK.class));
+        this.interactionsList.add(new ItemInteraction("wf_trg_HabboIsNotAfk", WiredConditionHabboIsNotAFK.class));
 
         this.interactionsList.add(new ItemInteraction("wf_act_close_dice", WiredEffectCloseDices.class));
         this.interactionsList.add(new ItemInteraction("wf_act_freeze_unfreeze", WiredEffectFreezeUnfreezeUserEffect.class));
@@ -217,7 +219,7 @@ public class ItemManager {
         this.interactionsList.add(new ItemInteraction("wf_act_move_rotate", WiredEffectMoveRotateFurni.class));
         this.interactionsList.add(new ItemInteraction("wf_act_give_score", WiredEffectGiveScore.class));
         this.interactionsList.add(new ItemInteraction("wf_act_show_message", WiredEffectWhisper.class));
-        this.interactionsList.add(new ItemInteraction("wf_act_show_message_room", WiredEffectWhisperRoom.class));
+        this.interactionsList.add(new ItemInteraction("wf_act_show_message_room_rompich", WiredEffectWhisperRoom.class));
         this.interactionsList.add(new ItemInteraction("wf_act_teleport_to", WiredEffectTeleport.class));
         this.interactionsList.add(new ItemInteraction("wf_act_join_team", WiredEffectJoinTeam.class));
         this.interactionsList.add(new ItemInteraction("wf_act_leave_team", WiredEffectLeaveTeam.class));
@@ -245,7 +247,6 @@ public class ItemManager {
         this.interactionsList.add(new ItemInteraction("wf_act_walktofurni_effect", WiredEffectUserWalkToFurni.class));
         this.interactionsList.add(new ItemInteraction("wf_act_lay_effect", WiredEffectUserLay.class));
         this.interactionsList.add(new ItemInteraction("wf_act_sit_effect", WiredEffectUserSit.class));
-
 
         this.interactionsList.add(new ItemInteraction("wf_cnd_has_furni_on", WiredConditionFurniHaveFurni.class));
         this.interactionsList.add(new ItemInteraction("wf_cnd_furnis_hv_avtrs", WiredConditionFurniHaveHabbo.class));

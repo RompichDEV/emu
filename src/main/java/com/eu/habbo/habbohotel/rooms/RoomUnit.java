@@ -179,9 +179,6 @@ public class RoomUnit {
             if (this.path.isEmpty()) {
                 this.sitUpdate = true;
 
-                if (next != null && next.hasUnits() && !overrideChecks) {
-                    return false;
-                }
             }
 
             Deque<RoomTile> peekPath = room.getLayout().findPath(this.currentLocation, this.path.peek(), this.goalLocation, this);
