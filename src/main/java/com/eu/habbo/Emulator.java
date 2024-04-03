@@ -17,6 +17,8 @@ import com.eu.habbo.plugin.events.emulator.EmulatorStartShutdownEvent;
 import com.eu.habbo.plugin.events.emulator.EmulatorStoppedEvent;
 import com.eu.habbo.threading.ThreadPooling;
 import com.eu.habbo.util.imager.badges.BadgeImager;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -493,6 +495,15 @@ public final class Emulator {
             }
         }
         return isnumeric;
+    }
+
+    public static boolean isValidJSON(String jsonString) {
+        try {
+            new JSONObject(new JSONTokener(jsonString));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public int getUserCount() {
