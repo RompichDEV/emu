@@ -21,12 +21,14 @@ public class ProfileFriendsComposer extends MessageComposer {
     private final List<MessengerBuddy> lovers = new ArrayList<>();
     private final List<MessengerBuddy> friends = new ArrayList<>();
     private final List<MessengerBuddy> haters = new ArrayList<>();
+    private final List<MessengerBuddy> poop = new ArrayList<>();
     private final int userId;
 
     public ProfileFriendsComposer(THashMap<Integer, THashSet<MessengerBuddy>> map, int userId) {
         this.lovers.addAll(map.get(1));
         this.friends.addAll(map.get(2));
         this.haters.addAll(map.get(3));
+        this.poop.addAll(map.get(4));
 
         this.userId = userId;
     }
@@ -46,6 +48,9 @@ public class ProfileFriendsComposer extends MessageComposer {
                         break;
                     case 3:
                         this.haters.add(map.getValue());
+                        break;
+                    case 4:
+                        this.poop.add(map.getValue());
                         break;
                 }
             }
@@ -71,6 +76,9 @@ public class ProfileFriendsComposer extends MessageComposer {
                 total++;
 
             if (!this.haters.isEmpty())
+                total++;
+
+            if (!this.poop.isEmpty())
                 total++;
 
             this.response.appendInt(total);
@@ -103,6 +111,16 @@ public class ProfileFriendsComposer extends MessageComposer {
                 this.response.appendString(this.haters.get(hatersIndex).getUsername());
                 this.response.appendString(this.haters.get(hatersIndex).getLook());
             }
+
+            if (!this.poop.isEmpty()) {
+                int poopIndex = random.nextInt(this.poop.size());
+                this.response.appendInt(4);
+                this.response.appendInt(this.poop.size());
+                this.response.appendInt(this.poop.get(poopIndex).getId());
+                this.response.appendString(this.poop.get(poopIndex).getUsername());
+                this.response.appendString(this.poop.get(poopIndex).getLook());
+            }
+
         } catch (Exception e) {
             LOGGER.error("Caught exception", e);
         }
