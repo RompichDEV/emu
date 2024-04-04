@@ -89,16 +89,21 @@ public class WiredEffectUserLay extends InteractionWiredEffect {
         if (roomUnit != null) {
             Habbo habbo = room.getHabbo(roomUnit);
             if (habbo != null) {
-                (habbo.getRoomUnit()).cmdLay = true;
-                habbo.getHabboInfo().getCurrentRoom().updateHabbo(habbo);
-                (habbo.getRoomUnit()).cmdSit = true;
-                habbo.getRoomUnit().setBodyRotation(RoomUserRotation.values()[habbo.getRoomUnit().getBodyRotation().getValue() - habbo.getRoomUnit().getBodyRotation().getValue() % 2]);
-                RoomTile tile = habbo.getRoomUnit().getCurrentLocation();
-                if (tile == null)
+                if(habbo.getRoomUnit().isWalking())
+                {
+                    (habbo.getRoomUnit()).cmdLay = false;
+                }else {
+                    (habbo.getRoomUnit()).cmdLay = true;
+                    habbo.getHabboInfo().getCurrentRoom().updateHabbo(habbo);
+                    (habbo.getRoomUnit()).cmdSit = true;
+                    habbo.getRoomUnit().setBodyRotation(RoomUserRotation.values()[habbo.getRoomUnit().getBodyRotation().getValue() - habbo.getRoomUnit().getBodyRotation().getValue() % 2]);
+                    RoomTile tile = habbo.getRoomUnit().getCurrentLocation();
+                    if (tile == null)
+                        return true;
+                    habbo.getRoomUnit().setStatus(RoomUnitStatus.LAY, "0.5");
+                    habbo.getHabboInfo().getCurrentRoom().sendComposer((new RoomUserStatusComposer(habbo.getRoomUnit())).compose());
                     return true;
-                habbo.getRoomUnit().setStatus(RoomUnitStatus.LAY, "0.5");
-                habbo.getHabboInfo().getCurrentRoom().sendComposer((new RoomUserStatusComposer(habbo.getRoomUnit())).compose());
-                return true;
+                }
             }
         }
         return false;
