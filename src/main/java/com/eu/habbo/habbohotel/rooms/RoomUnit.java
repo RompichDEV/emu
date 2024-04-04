@@ -14,6 +14,7 @@ import com.eu.habbo.messages.outgoing.rooms.users.RoomUserStatusComposer;
 import com.eu.habbo.plugin.Event;
 import com.eu.habbo.plugin.events.roomunit.RoomUnitLookAtPointEvent;
 import com.eu.habbo.plugin.events.roomunit.RoomUnitSetGoalEvent;
+import com.eu.habbo.plugin.events.roomunit.RoomUnitStopsWalkingEvent;
 import com.eu.habbo.plugin.events.users.UserIdleEvent;
 import com.eu.habbo.plugin.events.users.UserTakeStepEvent;
 import com.eu.habbo.threading.runnables.RoomUnitKick;
@@ -177,8 +178,9 @@ public class RoomUnit {
             boolean overrideChecks = next != null && this.canOverrideTile(next);
 
             if (this.path.isEmpty()) {
+                RoomTile finalNext = next;
+                Emulator.getThreading().run(() -> Emulator.getPluginManager().fireEvent(new RoomUnitStopsWalkingEvent(this.room, this, finalNext)), 500);
                 this.sitUpdate = true;
-
             }
 
             Deque<RoomTile> peekPath = room.getLayout().findPath(this.currentLocation, this.path.peek(), this.goalLocation, this);

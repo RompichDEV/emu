@@ -15,6 +15,7 @@ import com.eu.habbo.habbohotel.items.ItemManager;
 import com.eu.habbo.habbohotel.items.interactions.InteractionPostIt;
 import com.eu.habbo.habbohotel.items.interactions.InteractionRoller;
 import com.eu.habbo.habbohotel.items.interactions.games.football.InteractionFootballGate;
+import com.eu.habbo.habbohotel.items.interactions.wired.triggers.WiredTriggerHabboStopsWalking;
 import com.eu.habbo.habbohotel.messenger.Messenger;
 import com.eu.habbo.habbohotel.modtool.WordFilter;
 import com.eu.habbo.habbohotel.navigation.EventCategory;
@@ -42,6 +43,7 @@ import com.eu.habbo.messages.outgoing.navigator.NewNavigatorEventCategoriesCompo
 import com.eu.habbo.plugin.events.emulator.EmulatorConfigUpdatedEvent;
 import com.eu.habbo.plugin.events.emulator.EmulatorLoadedEvent;
 import com.eu.habbo.plugin.events.roomunit.RoomUnitLookAtPointEvent;
+import com.eu.habbo.plugin.events.roomunit.RoomUnitStopsWalkingEvent;
 import com.eu.habbo.plugin.events.users.*;
 import com.eu.habbo.threading.runnables.RoomTrashing;
 import com.eu.habbo.threading.runnables.ShutdownEmulator;
@@ -425,6 +427,10 @@ public class PluginManager {
             this.methods.add(InteractionFootballGate.class.getMethod("onUserSavedLookEvent", UserSavedLookEvent.class));
             this.methods.add(PluginManager.class.getMethod("globalOnConfigurationUpdated", EmulatorConfigUpdatedEvent.class));
             this.methods.add(WiredHighscoreManager.class.getMethod("onEmulatorLoaded", EmulatorLoadedEvent.class));
+
+
+            // Wireds
+            this.methods.add(WiredTriggerHabboStopsWalking.class.getMethod("onRoomUnitStopsWalking", RoomUnitStopsWalkingEvent.class));
         } catch (NoSuchMethodException e) {
             LOGGER.info("Failed to define default events!");
             LOGGER.error("Caught exception", e);

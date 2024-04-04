@@ -210,6 +210,7 @@ public class ItemManager {
         this.interactionsList.add(new ItemInteraction("wf_trg_game_team_lose", WiredTriggerTeamLoses.class));
         this.interactionsList.add(new ItemInteraction("wf_trg_HabboIsAfk", WiredConditionHabboIsAFK.class));
         this.interactionsList.add(new ItemInteraction("wf_trg_HabboIsNotAfk", WiredConditionHabboIsNotAFK.class));
+        this.interactionsList.add(new ItemInteraction("wf_trg_habbo_stops_walking", WiredTriggerHabboStopsWalking.class));
 
         this.interactionsList.add(new ItemInteraction("wf_act_close_dice", WiredEffectCloseDices.class));
         this.interactionsList.add(new ItemInteraction("wf_act_freeze_unfreeze", WiredEffectFreezeUnfreezeUserEffect.class));
