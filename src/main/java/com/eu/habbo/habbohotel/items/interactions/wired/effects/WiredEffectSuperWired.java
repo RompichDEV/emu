@@ -143,6 +143,12 @@ public class WiredEffectSuperWired extends WiredEffectWhisper {
                     }
                 }
                 break;
+            case "rot":
+                if (this.message.length() > 0) {
+                    Integer value = Integer.parseInt(finalText[1]);
+                    habbo.getRoomUnit().setBodyRotation(RoomUserRotation.values()[value.intValue()]);
+                }
+                break;
             case "fastwalk":
                 habbo.getRoomUnit().setFastWalk(!habbo.getRoomUnit().isFastWalk());
                 break;
