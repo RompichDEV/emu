@@ -9,10 +9,9 @@ import com.eu.habbo.habbohotel.items.interactions.wired.WiredSettings;
 import com.eu.habbo.habbohotel.permissions.Permission;
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.rooms.RoomUnit;
-import com.eu.habbo.habbohotel.rooms.RoomUserRotation;
 import com.eu.habbo.habbohotel.users.Habbo;
-import com.eu.habbo.habbohotel.wired.WiredEffectType;
 import com.eu.habbo.habbohotel.wired.WiredHandler;
+import com.eu.habbo.habbohotel.wired.WiredEffectType;
 import com.eu.habbo.messages.ClientMessage;
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.incoming.wired.WiredSaveException;
@@ -22,16 +21,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WiredEffectSetBodyRotation extends InteractionWiredEffect {
-    public static final WiredEffectType type = WiredEffectType.SHOW_MESSAGE;
+public class WiredEffectUserUnMute extends InteractionWiredEffect {
+    public static final WiredEffectType type = WiredEffectType.RESET_TIMERS;
 
     protected String message = "";
 
-    public WiredEffectSetBodyRotation(ResultSet set, Item baseItem) throws SQLException {
+    public WiredEffectUserUnMute(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectSetBodyRotation(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
+    public WiredEffectUserUnMute(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
@@ -83,14 +82,10 @@ public class WiredEffectSetBodyRotation extends InteractionWiredEffect {
 
 
     public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
-        if (this.message.length() > 0) {
-            Integer value = Integer.valueOf(this.message);
-            if (roomUnit != null) {
-                Habbo habbo = room.getHabbo(roomUnit);
-                if (habbo != null &&
-                        value.intValue() > 0)
-                    habbo.getRoomUnit().setBodyRotation(RoomUserRotation.values()[value.intValue()]);
-            }
+        if (roomUnit != null) {
+            Habbo habbo = room.getHabbo(roomUnit);
+            if (habbo != null)
+                habbo.getHabboInfo().getCurrentRoom().setMuted(false);
         }
         return false;
     }
