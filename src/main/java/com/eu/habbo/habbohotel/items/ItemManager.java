@@ -249,6 +249,9 @@ public class ItemManager {
         this.interactionsList.add(new ItemInteraction("wf_act_lay_effect", WiredEffectUserLay.class));
         this.interactionsList.add(new ItemInteraction("wf_act_sit_effect", WiredEffectUserSit.class));
         this.interactionsList.add(new ItemInteraction("wf_act_collide_room", WiredEffectCollideRoom.class));
+        this.interactionsList.add(new ItemInteraction("wf_act_superwired", WiredEffectSuperWired.class));
+        this.interactionsList.add(new ItemInteraction("wf_act_rot", WiredEffectSetBodyRotation.class));
+        this.interactionsList.add(new ItemInteraction("aw_act_user_unmute", WiredEffectUserUnMute.class));
 
         this.interactionsList.add(new ItemInteraction("wf_cnd_has_furni_on", WiredConditionFurniHaveFurni.class));
         this.interactionsList.add(new ItemInteraction("wf_cnd_furnis_hv_avtrs", WiredConditionFurniHaveHabbo.class));
