@@ -63,7 +63,7 @@ public class WiredEffectSetBodyRotation extends InteractionWiredEffect {
         message.appendInt(Integer.valueOf(0));
         message.appendInt(Integer.valueOf(0));
         message.appendInt(Integer.valueOf(type.code));
-        message.appendInt(Integer.valueOf(getDelay()));
+        message.appendInt(getDelay());
         if (requiresTriggeringUser()) {
             final List<Integer> invalidTriggers = new ArrayList<>();
             room.getRoomSpecialTypes().getTriggers(getX(), getY()).forEach(new TObjectProcedure<InteractionWiredTrigger>() {
@@ -73,11 +73,11 @@ public class WiredEffectSetBodyRotation extends InteractionWiredEffect {
                     return true;
                 }
             });
-            message.appendInt(Integer.valueOf(invalidTriggers.size()));
+            message.appendInt(invalidTriggers.size());
             for (Integer i : invalidTriggers)
                 message.appendInt(i);
         } else {
-            message.appendInt(Integer.valueOf(0));
+            message.appendInt(0);
         }
     }
 
