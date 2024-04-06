@@ -214,4 +214,8 @@ public class RoomTile {
     public boolean unitIsOnFurniOnTile(RoomUnit unit, Item item) {
         return (unit.getX() >= this.x && unit.getX() < this.x + item.getLength()) && (unit.getY() >= this.y && unit.getY() < this.y + item.getWidth());
     }
+
+    public boolean zDiffIsNegligible(double z) {
+        return Math.abs(this.stackHeight - z) < 0.001;
+    }
 }

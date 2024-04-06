@@ -18,6 +18,7 @@ import gnu.trove.set.hash.THashSet;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,28 +47,29 @@ public class WiredEffectChangeFurniDirection extends InteractionWiredEffect {
 
     @Override
     public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
-        THashSet<HabboItem> items = new THashSet<>();
+        THashSet<HabboItem> itemsToRemove = new THashSet<>();
+        for (HabboItem item : this.items.keySet())
+            if (item == null || item.getRoomId() == 0 || room.getHabboItem(item.getId()) == null)
+                itemsToRemove.add(item);
 
-        for (HabboItem item : this.items.keySet()) {
-            if (Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(item.getId()) == null)
-                items.add(item);
-        }
-
-        for (HabboItem item : items) {
+        for (HabboItem item : itemsToRemove)
             this.items.remove(item);
-        }
 
-        if (this.items.isEmpty()) return false;
+        if (this.items.isEmpty())
+            return false;
 
-        for (Map.Entry<HabboItem, WiredChangeDirectionSetting> entry : this.items.entrySet()) {
-            HabboItem item = entry.getKey();
-            RoomTile targetTile = room.getLayout().getTileInFront(room.getLayout().getTile(item.getX(), item.getY()), entry.getValue().direction.getValue());
+        List<HabboItem> itemList = new ArrayList<>(this.items.keySet());
+        itemList.sort(Comparator.comparing(HabboItem::getZ));
+
+        for (HabboItem item : itemList) {
+            WiredChangeDirectionSetting value = this.items.get(item);
+            RoomTile targetTile = room.getLayout().getTileInFront(room.getLayout().getTile(item.getX(), item.getY()), value.direction.getValue());
 
             int count = 1;
-            while ((targetTile == null || targetTile.state == RoomTileState.INVALID || room.furnitureFitsAt(targetTile, item, item.getRotation(), false) != FurnitureMovementError.NONE) && count < 8) {
-                entry.getValue().direction = this.nextRotation(entry.getValue().direction);
+            while ((targetTile == null || targetTile.state == RoomTileState.INVALID || room.furnitureFitsAt(targetTile, item, item.getRotation(), false) != FurnitureMovementError.NONE || !targetTile.zDiffIsNegligible(item.getZ())) && count < 8) {
+                value.direction = this.nextRotation(value.direction);
 
-                RoomTile tile = room.getLayout().getTileInFront(room.getLayout().getTile(item.getX(), item.getY()), entry.getValue().direction.getValue());
+                RoomTile tile = room.getLayout().getTileInFront(room.getLayout().getTile(item.getX(), item.getY()), value.direction.getValue());
                 if (tile != null && tile.state != RoomTileState.INVALID) {
                     targetTile = tile;
                 }

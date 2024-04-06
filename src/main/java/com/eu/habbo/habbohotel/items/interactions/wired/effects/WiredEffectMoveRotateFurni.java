@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,18 +49,26 @@ public class WiredEffectMoveRotateFurni extends InteractionWiredEffect implement
 
     @Override
     public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
-        // remove items that are no longer in the room
-        this.items.removeIf(item -> Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(item.getId()) == null);
+        THashSet<HabboItem> itemsToRemove = new THashSet<>();
+        for (HabboItem item : this.items)
+            if (item == null || item.getRoomId() == 0 || room.getHabboItem(item.getId()) == null)
+                itemsToRemove.add(item);
+        this.items.removeAll(itemsToRemove);
 
-        for (HabboItem item : this.items) {
+        if (this.items.isEmpty())
+            return false;
+
+        List<HabboItem> itemList = new ArrayList<>(this.items);
+        itemList.sort(Comparator.comparing(HabboItem::getZ));
+
+        for (HabboItem item : itemList) {
             if(this.itemCooldowns.contains(item))
                 continue;
 
             int newRotation = this.rotation > 0 ? this.getNewRotation(item) : item.getRotation();
-            RoomTile newLocation = room.getLayout().getTile(item.getX(), item.getY());
             RoomTile oldLocation = room.getLayout().getTile(item.getX(), item.getY());
+            RoomTile newLocation = oldLocation;
             double oldZ = item.getZ();
-            double newZ = item.getZ();
 
             if(this.direction > 0) {
                 RoomUserRotation moveDirection = this.getMovementDirection();
@@ -66,13 +76,11 @@ public class WiredEffectMoveRotateFurni extends InteractionWiredEffect implement
                     (short) (item.getX() + ((moveDirection == RoomUserRotation.WEST || moveDirection == RoomUserRotation.NORTH_WEST || moveDirection == RoomUserRotation.SOUTH_WEST) ? -1 : (((moveDirection == RoomUserRotation.EAST || moveDirection == RoomUserRotation.SOUTH_EAST || moveDirection == RoomUserRotation.NORTH_EAST) ? 1 : 0)))),
                     (short) (item.getY() + ((moveDirection == RoomUserRotation.NORTH || moveDirection == RoomUserRotation.NORTH_EAST || moveDirection == RoomUserRotation.NORTH_WEST) ? 1 : ((moveDirection == RoomUserRotation.SOUTH || moveDirection == RoomUserRotation.SOUTH_EAST || moveDirection == RoomUserRotation.SOUTH_WEST) ? -1 : 0)))
                 );
+                if (newLocation == null || !newLocation.zDiffIsNegligible(oldZ))
+                    continue;
             }
 
             boolean slideAnimation = item.getRotation() == newRotation;
-            System.out.println(room);
-            System.out.println(item);
-            System.out.println(oldLocation);
-            System.out.println(newLocation);
             FurnitureMovementError furniMoveTest = room.furnitureFitsAt(newLocation, item, newRotation, true);
             if(newLocation != null && newLocation.state != RoomTileState.INVALID && (newLocation != oldLocation || newRotation != item.getRotation()) && (furniMoveTest == FurnitureMovementError.NONE || ((furniMoveTest == FurnitureMovementError.TILE_HAS_BOTS || furniMoveTest == FurnitureMovementError.TILE_HAS_HABBOS || furniMoveTest == FurnitureMovementError.TILE_HAS_PETS) && newLocation == oldLocation))) {
                 if(room.furnitureFitsAt(newLocation, item, newRotation, false) == FurnitureMovementError.NONE && room.moveFurniTo(item, newLocation, newRotation, null, !slideAnimation) == FurnitureMovementError.NONE) {
