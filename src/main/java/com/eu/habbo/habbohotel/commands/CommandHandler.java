@@ -296,6 +296,9 @@ public class CommandHandler {
 
         addCommand(new TestCommand());
         addCommand(new CommandeCommand());
+
+        // Skzz
+        addCommand(new CloseDicesCommand());
     }
 
     public List<Command> getCommandsForRank(int rankId) {

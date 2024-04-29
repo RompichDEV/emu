@@ -214,6 +214,7 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
     private TraxManager traxManager;
     private boolean cycleOdd;
     private long cycleTimestamp;
+    private final THashMap<Integer, List<Integer>> usersDicesTotalCount = new THashMap<>();
 
     public Room(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
@@ -4867,5 +4868,20 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
     public Collection<RoomUnit> getRoomUnitsAt(RoomTile tile) {
         THashSet<RoomUnit> roomUnits = getRoomUnits();
         return roomUnits.stream().filter(unit -> unit.getCurrentLocation() == tile).collect(Collectors.toSet());
+    }
+
+
+    public List<Integer> getUserDicesRolls(Integer userId) {
+        if (!usersDicesTotalCount.containsKey(userId))
+            usersDicesTotalCount.put(userId, new ArrayList<>());
+        return usersDicesTotalCount.get(userId);
+    }
+
+    public void addUserDiceRoll(Integer userId, int rolledNumber) {
+        this.getUserDicesRolls(userId).add(rolledNumber);
+    }
+
+    public void resetUserDicesRolls(Integer userId) {
+        this.usersDicesTotalCount.remove(userId);
     }
 }

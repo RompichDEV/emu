@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -555,5 +556,9 @@ public abstract class HabboItem implements Runnable, IEventTriggers {
                 this.getBaseItem().getWidth() + (marginX * 2),
                 this.getBaseItem().getLength() + (marginY * 2),
                 this.getRotation());
+    }
+
+    public Point get2DPosition() {
+        return new Point(getX(), getY());
     }
 }

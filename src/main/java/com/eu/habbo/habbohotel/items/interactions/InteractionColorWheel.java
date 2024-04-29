@@ -53,7 +53,7 @@ public class InteractionColorWheel extends HabboItem {
             this.setExtradata("-1");
             room.sendComposer(new WallItemUpdateComposer(this).compose());
             Emulator.getThreading().run(this);
-            Emulator.getThreading().run(new RandomDiceNumber(this, room, this.getBaseItem().getStateCount()), 3000);
+            Emulator.getThreading().run(new RandomDiceNumber(this, room, this.getBaseItem().getStateCount(), client.getHabbo().getRoomUnit()), 3000);
         }
     }
 

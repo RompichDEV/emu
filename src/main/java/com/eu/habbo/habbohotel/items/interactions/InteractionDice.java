@@ -46,7 +46,8 @@ public class InteractionDice extends HabboItem {
         super.onClick(client, room, objects);
 
         if (client != null) {
-            if (RoomLayout.tilesAdjecent(room.getLayout().getTile(this.getX(), this.getY()), client.getHabbo().getRoomUnit().getCurrentLocation())) {
+            RoomUnit roomUnit = client.getHabbo().getRoomUnit();
+            if (RoomLayout.tilesAdjecent(room.getLayout().getTile(this.getX(), this.getY()), roomUnit.getCurrentLocation())) {
                 if (!this.getExtradata().equalsIgnoreCase("-1")) {
                     FurnitureDiceRolledEvent event = (FurnitureDiceRolledEvent) Emulator.getPluginManager().fireEvent(new FurnitureDiceRolledEvent(this, client.getHabbo(), -1));
 
@@ -58,9 +59,9 @@ public class InteractionDice extends HabboItem {
                     Emulator.getThreading().run(this);
 
                     if (event.result > 0) {
-                        Emulator.getThreading().run(new RandomDiceNumber(room, this, event.result), 1500);
+                        Emulator.getThreading().run(new RandomDiceNumber(room, this, event.result, roomUnit), 1500);
                     } else {
-                        Emulator.getThreading().run(new RandomDiceNumber(this, room, this.getBaseItem().getStateCount()), 1500);
+                        Emulator.getThreading().run(new RandomDiceNumber(this, room, this.getBaseItem().getStateCount(), roomUnit), 1500);
                     }
                 }
             }
