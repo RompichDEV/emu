@@ -29,7 +29,7 @@ public class CloseDicesCommand extends Command {
 
         if (params.length == 1) {
             for (HabboItem item : room.getFloorItems())
-                if (item instanceof InteractionDice && self.getRoomUnit().get2DPosition().distance(item.get2DPosition()) < 1.5 && Math.abs(self.getRoomUnit().getZ() - item.getZ()) <= RoomLayout.MAXIMUM_STEP_HEIGHT && !item.getExtradata().equalsIgnoreCase("0"))
+                if (item instanceof InteractionDice && self.getRoomUnit().get2DPosition().distance(item.get2DPosition()) < 1.5 && !item.getExtradata().equalsIgnoreCase("0"))
                     this.closeDice(item, room);
 
             room.resetUserDicesRolls(self.getHabboInfo().getId());
