@@ -61,6 +61,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -238,6 +239,25 @@ public class PluginManager {
 
     public void loadPlugins() {
         this.disposePlugins();
+
+        ArrayList<HabboPlugin> incorporatedPlugins = new ArrayList<>();
+
+        // Get instance of incorporated plugins
+        // XXX xxx = new XXX();
+
+        // List them all in an array
+        // incorporatedPlugins.add(xxx);
+
+        // Enable all
+        for (HabboPlugin incorporatedPlugin : incorporatedPlugins) {
+            try {
+                incorporatedPlugin.onEnable();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        this.plugins.addAll(incorporatedPlugins);
 
         File loc = new File("plugins");
 

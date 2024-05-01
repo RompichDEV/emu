@@ -142,7 +142,7 @@ public class WiredHandler {
             triggerEffect(effect, roomUnit, room, stuff, millis);
         }
 
-        return effectsToExecute.size() > 0;
+        return !effectsToExecute.isEmpty();
     }
 
     public static boolean handle(InteractionWiredTrigger trigger, final RoomUnit roomUnit, final Room room, final Object[] stuff) {
@@ -169,6 +169,7 @@ public class WiredHandler {
             if (Emulator.getPluginManager().fireEvent(new WiredStackTriggeredEvent(room, roomUnit, trigger, effects, conditions)).isCancelled())
                 return false;
 
+            boolean allConditionsVerified = true;
             if (!conditions.isEmpty()) {
                 ArrayList<WiredConditionType> matchedConditions = new ArrayList<>(conditions.size());
                 for (InteractionWiredCondition searchMatched : conditions) {
@@ -181,44 +182,40 @@ public class WiredHandler {
                     if (!((condition.operator() == WiredConditionOperator.OR && matchedConditions.contains(condition.getType())) ||
                             (condition.operator() == WiredConditionOperator.AND && condition.execute(roomUnit, room, stuff))) &&
                             !Emulator.getPluginManager().fireEvent(new WiredConditionFailedEvent(room, roomUnit, trigger, condition)).isCancelled()) {
-
-                        return false;
+                        allConditionsVerified = false;
+                        break;
                     }
                 }
             }
 
             trigger.setCooldown(millis);
 
-            boolean hasExtraRandom = room.getRoomSpecialTypes().hasExtraType(trigger.getX(), trigger.getY(), WiredExtraRandom.class);
-            boolean hasExtraUnseen = room.getRoomSpecialTypes().hasExtraType(trigger.getX(), trigger.getY(), WiredExtraUnseen.class);
-            THashSet<InteractionWiredExtra> extras = room.getRoomSpecialTypes().getExtras(trigger.getX(), trigger.getY());
+            if (allConditionsVerified) {
+                boolean hasExtraRandom = room.getRoomSpecialTypes().hasExtraType(trigger.getX(), trigger.getY(), WiredExtraRandom.class);
+                boolean hasExtraUnseen = room.getRoomSpecialTypes().hasExtraType(trigger.getX(), trigger.getY(), WiredExtraUnseen.class);
+                THashSet<InteractionWiredExtra> extras = room.getRoomSpecialTypes().getExtras(trigger.getX(), trigger.getY());
 
-            for (InteractionWiredExtra extra : extras) {
-                extra.activateBox(room, roomUnit, millis);
-            }
+                for (InteractionWiredExtra extra : extras)
+                    extra.activateBox(room, roomUnit, millis);
 
-            List<InteractionWiredEffect> effectList = new ArrayList<>(effects);
+                List<InteractionWiredEffect> effectList = new ArrayList<>(effects);
 
-            if (hasExtraRandom || hasExtraUnseen) {
-                Collections.shuffle(effectList);
-            }
-
-
-            if (hasExtraUnseen) {
-                for (InteractionWiredExtra extra : room.getRoomSpecialTypes().getExtras(trigger.getX(), trigger.getY())) {
-                    if (extra instanceof WiredExtraUnseen) {
-                        extra.setExtradata(extra.getExtradata().equals("1") ? "0" : "1");
-                        InteractionWiredEffect effect = ((WiredExtraUnseen) extra).getUnseenEffect(effectList);
-                        effectsToExecute.add(effect); // triggerEffect(effect, roomUnit, room, stuff, millis);
-                        break;
+                if (hasExtraUnseen) {
+                    Collections.shuffle(effectList);
+                    for (InteractionWiredExtra extra : room.getRoomSpecialTypes().getExtras(trigger.getX(), trigger.getY())) {
+                        if (extra instanceof WiredExtraUnseen) {
+                            extra.setExtradata(extra.getExtradata().equals("1") ? "0" : "1");
+                            InteractionWiredEffect effect = ((WiredExtraUnseen) extra).getUnseenEffect(effectList);
+                            effectsToExecute.add(effect);
+                            break;
+                        }
                     }
-                }
-            } else {
-                for (final InteractionWiredEffect effect : effectList) {
-                    boolean executed = effectsToExecute.add(effect); //triggerEffect(effect, roomUnit, room, stuff, millis);
-                    if (hasExtraRandom && executed) {
-                        break;
-                    }
+                } else if (hasExtraRandom) {
+                    Collections.shuffle(effectList);
+                    if (!effectList.isEmpty())
+                        effectsToExecute.add(effectList.get(0));
+                } else {
+                    effectsToExecute.addAll(effectList);
                 }
             }
 
