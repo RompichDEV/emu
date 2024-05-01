@@ -243,6 +243,18 @@ public class RoomLayout {
         return null;
     }
 
+    public RoomTile getTile(Point tile) {
+        if (this.tileExists(tile)) {
+            return this.roomTiles[tile.x][tile.y];
+        }
+
+        return null;
+    }
+
+    public boolean tileExists(Point tile) {
+        return !(tile.x < 0 || tile.y < 0 || tile.x >= this.getMapSizeX() || tile.y >= this.getMapSizeY());
+    }
+
     public boolean tileExists(short x, short y) {
         return !(x < 0 || y < 0 || x >= this.getMapSizeX() || y >= this.getMapSizeY());
     }
